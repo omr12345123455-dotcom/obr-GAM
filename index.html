@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBR - عالمنا الخاص 🌸✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+    }
+    body {
+      background: #09090e;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    header h1 {
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(45deg, #ff758c, #ff7eb3, #70a1ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+    }
+    header p {
+      font-size: 12px;
+      color: #8a8aab;
+    }
+    /* أزرار التنقل الفاخرة */
+    .nav-tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 600px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+    .nav-tabs button {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #aaa;
+      padding: 8px 5px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+    .nav-tabs button.active {
+      background: linear-gradient(45deg, #ff758c, #ff7eb3);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(255, 117, 140, 0.4);
+    }
+    .section-content {
+      display: none;
+      width: 100%;
+      max-width: 600px;
+      background: rgba(20, 20, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 18px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      margin-bottom: 20px;
+    }
+    .section-content.active { display: block; }
+    textarea, input {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid #2a2a3e;
+      border-radius: 12px;
+      color: #fff;
+      padding: 12px;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    textarea:focus, input:focus { border-color: #ff758c; outline: none; }
+    textarea { height: 90px; resize: none; }
+    .btn-main {
+      width: 100%;
+      background: linear-gradient(45deg, #ff758c, #ff7eb3);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(255,117,140,0.3);
+    }
+    .btn-main:hover { opacity: 0.9; transform: translateY(-2px); }
+    
+    .game-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .option-btn {
+      width: 100%;
+      background: #1a1a2e;
+      color: #fff;
+      border: 1px solid #2a2a4e;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .option-btn:hover { background: #ff758c; border-color: transparent; }
+
+    /* تحليل المزاج والمشاعر */
+    .mood-selector {
+      display: flex;
+      justify-content: space-around;
+      font-size: 26px;
+      margin: 12px 0;
+      cursor: pointer;
+    }
+    .mood-selector span { padding: 6px; border-radius: 50%; transition: 0.2s; }
+    .mood-selector span.selected { background: rgba(255, 117, 140, 0.3); transform: scale(1.2); }
+
+    /* استديو فلاتر الكاميرا (شبيه السناب) */
+    .snap-studio {
+      text-align: center;
+    }
+    #videoElement {
+      width: 100%;
+      max-height: 250px;
+      border-radius: 15px;
+      background: #000;
+      object-fit: cover;
+      transform: scaleX(-1); /* مرآة */
+      border: 2px solid #ff758c;
+    }
+    .filter-overlay {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 28px;
+      pointer-events: none;
+      animation: float 2s infinite ease-in-out;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -8px); }
+    }
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .filter-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid #444;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .filter-btn.active { background: #ff758c; border-color: transparent; }
+
+    /* قفل الآيفون (الرمز 992009) */
+    .iphone-lock-screen { display: flex; flex-direction: column; align-items: center; padding: 5px 0; }
+    .lock-icon { font-size: 28px; margin-bottom: 8px; }
+    .lock-title { font-size: 14px; color: #aaa; margin-bottom: 15px; font-weight: 700; }
+    .pin-dots { display: flex; gap: 12px; margin-bottom: 25px; }
+    .pin-dot {
+      width: 14px; height: 14px; border: 2px solid #ff758c; border-radius: 50%; background: transparent; transition: 0.2s;
+    }
+    .pin-dot.filled { background: #ff758c; box-shadow: 0 0 10px #ff758c; }
+    .keypad { display: grid; grid-template-columns: repeat(3, 65px); gap: 12px; justify-content: center; }
+    .key-btn {
+      width: 65px; height: 65px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%;
+      color: #fff; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .key-btn:active { background: rgba(255, 117, 140, 0.3); }
+    .key-letters { font-size: 7px; letter-spacing: 2px; color: #888; }
+    .msg-card {
+      background: rgba(255, 117, 140, 0.08); border-right: 4px solid #ff758c; padding: 12px; border-radius: 10px; margin-bottom: 12px; font-size: 13px;
+    }
+    .saved-photo { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; margin-top: 5px; border: 1px solid #ff758c; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>OBR WORLD 🌸✨</h1>
+    <p>تحدي، فضفضة، كاميرا الفلاتر، وأسرار الحبايب</p>
+  </header>
+
+  <!-- أزرار التنقل -->
+  <div class="nav-tabs">
+    <button class="active" onclick="switchTab('quiz')">🎮 التحدي</button>
+    <button onclick="switchTab('games')">🎲 السهرات</button>
+    <button onclick="switchTab('snap')">📸 كاميرا الفلاتر</button>
+    <button onclick="switchTab('confession')">💌 الفضفضة</button>
+    <button onclick="switchTab('workerTool')">🛠️ الأعمال</button>
+    <button onclick="switchTab('adminPanel')">🔐 لوحة عمران</button>
+  </div>
+
+  <!-- 1. لعبة الأسئلة -->
+  <div id="quiz" class="section-content active">
+    <h2 style="color: #ff758c; margin-bottom: 12px; text-align: center; font-size: 18px;">تحدي المعرفة الذكي</h2>
+    <div id="quiz-container">
+      <p id="question-text" style="font-size: 15px; margin-bottom: 12px; font-weight: bold; text-align: center;"></p>
+      <div id="options-container"></div>
+      <p style="margin-top: 12px; text-align: center; color: gold; font-weight: bold;" id="score-display">النقاط: 200</p>
+    </div>
+  </div>
+
+  <!-- 2. ألعاب السهرات -->
+  <div id="games" class="section-content">
+    <h2 style="color: #70a1ff; margin-bottom: 12px; text-align: center; font-size: 18px;">عجلة أسئلة الحبايب والسهرات 🎲</h2>
+    <div class="game-card">
+      <p id="loveQuestion" style="font-size: 14px; margin-bottom: 12px; color: #ddd; min-height: 45px;">اضغط الزر لتظهر أسئلة تزيد الشوق والمحبة وتطول سهرتكم!</p>
+      <button class="btn-main" onclick="spinLoveWheel()">اسحب سؤال السهرة 💫</button>
+    </div>
+  </div>
+
+  <!-- 3. كاميرا الفلاتر (شبيه السناب) -->
+  <div id="snap" class="section-content">
+    <h2 style="color: #ff758c; margin-bottom: 10px; text-align: center; font-size: 18px;">استديو فلاتر OBR 📸✨</h2>
+    <div class="snap-studio" style="position: relative;">
+      <div id="activeFilter" class="filter-overlay">👑</div>
+      <video id="videoElement" autoplay playsinline></video>
+      <div class="filter-buttons">
+        <button class="filter-btn active" onclick="setFilter('👑', this)">تاج</button>
+        <button class="filter-btn" onclick="setFilter('💖', this)">قلوب</button>
+        <button class="filter-btn" onclick="setFilter('🥺', this)">لطيف</button>
+      </div>
+      <button class="btn-main" onclick="captureSnap()" style="margin-top: 10px;">التقاط وإرسال مفاجأة لعمران 🤍</button>
+      <canvas id="canvasElement" style="display:none;"></canvas>
+    </div>
+  </div>
+
+  <!-- 4. الفضفضة والمزاج -->
+  <div id="confession" class="section-content">
+    <h2 style="color: #ff758c; margin-bottom: 10px; font-size: 18px;">فضفضة من قلبك 🤍</h2>
+    <div style="text-align: center; margin-bottom: 8px; font-size: 13px; color: #70a1ff;">كيف مزاجك اليوم؟</div>
+    <div class="mood-selector">
+      <span onclick="selectMood('😊')" id="m1">😊</span>
+      <span onclick="selectMood('😔')" id="m2">😔</span>
+      <span onclick="selectMood('❤️')" id="m3">❤️</span>
+      <span onclick="selectMood('🥺')" id="m4">🥺</span>
+    </div>
+    <textarea id="confessionInput" placeholder="اكتبي فضفضتك هنا..."></textarea>
+    <button class="btn-main" onclick="sendConfession()">إرسال لعمران بكل حب</button>
+  </div>
+
+  <!-- 5. مبسط الأعمال -->
+  <div id="workerTool" class="section-content">
+    <h2 style="color: #70a1ff; margin-bottom: 10px; font-size: 18px;">أداة مبسط الأعمال الحرة 🛠️</h2>
+    <div class="game-card">
+      <input type="number" id="dailyIncome" placeholder="إجمالي الدخل اليومي">
+      <input type="number" id="dailyExpenses" placeholder="إجمالي المصاريف">
+      <button class="btn-main" onclick="calculateProfit()" style="background: linear-gradient(45deg, #2ed573, #7bed9f);">احسب الصافي</button>
+      <p id="profitResult" style="margin-top: 8px; font-weight: bold; color: gold;"></p>
+    </div>
+  </div>
+
+  <!-- 6. لوحة عمران (قفل الآيفون 992009) -->
+  <div id="adminPanel" class="section-content">
+    <h2 style="color: #70a1ff; margin-bottom: 12px; text-align: center; font-size: 18px;">لوحة إشعارات وفضفضة حبيبتي 🛡️</h2>
+    
+    <div id="iphoneLock" class="iphone-lock-screen">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">أدخل رمز المرور السري (992009)</div>
+      
+      <div class="pin-dots">
+        <div class="pin-dot" id="d0"></div>
+        <div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div>
+        <div class="pin-dot" id="d3"></div>
+        <div class="pin-dot" id="d4"></div>
+        <div class="pin-dot" id="d5"></div>
+      </div>
+
+      <div class="keypad">
+        <button class="key-btn" onclick="pressKey('1')">1</button>
+        <button class="key-btn" onclick="pressKey('2')">2<span class="key-letters">ABC</span></button>
+        <button class="key-btn" onclick="pressKey('3')">3<span class="key-letters">DEF</span></button>
+        <button class="key-btn" onclick="pressKey('4')">4<span class="key-letters">GHI</span></button>
+        <button class="key-btn" onclick="pressKey('5')">5<span class="key-letters">JKL</span></button>
+        <button class="key-btn" onclick="pressKey('6')">6<span class="key-letters">MNO</span></button>
+        <button class="key-btn" onclick="pressKey('7')">7<span class="key-letters">PQRS</span></button>
+        <button class="key-btn" onclick="pressKey('8')">8<span class="key-letters">TUV</span></button>
+        <button class="key-btn" onclick="pressKey('9')">9<span class="key-letters">WXYZ</span></button>
+        <button class="key-btn" style="visibility: hidden;"></button>
+        <button class="key-btn" onclick="pressKey('0')">0</button>
+        <button class="key-btn" onclick="deleteKey()" style="font-size: 16px; background: transparent; border: none;">⌫</button>
+      </div>
+    </div>
+
+    <div id="adminDataBox" style="display: none;">
+      <div id="messagesList"></div>
+      <button class="btn-main" onclick="lockAdmin()" style="background: #444; margin-top: 12px;">قفل اللوحة</button>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tabs button').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+
+      if(tabId === 'snap') { startCamera(); } else { stopCamera(); }
+    }
+
+    // كاميرا الفلاتر
+    let videoStream = null;
+    function startCamera() {
+      navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+        videoStream = stream;
+        document.getElementById('videoElement').srcObject = stream;
+      }).catch(err => { console.log("الكاميرا غير متاحة:", err); });
+    }
+    function stopCamera() {
+      if(videoStream) { videoStream.getTracks().forEach(track => track.stop()); }
+    }
+    function setFilter(emoji, btn) {
+      document.getElementById('activeFilter').innerText = emoji;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    function captureSnap() {
+      const video = document.getElementById('videoElement');
+      const canvas = document.getElementById('canvasElement');
+      canvas.width = video.videoWidth || 300;
+      canvas.height = video.videoHeight || 200;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataURL = canvas.toDataURL('image/png');
+
+      const messages = JSON.parse(localStorage.getItem('omar_confessions') || '[]');
+      messages.unshift({ 
+        text: "التطقت صورة مفاجأة بكاميرا الفلاتر 📸✨", 
+        mood: document.getElementById('activeFilter').innerText,
+        photo: dataURL,
+        time: new Date().toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' }) 
+      });
+      localStorage.setItem('omar_confessions', JSON.stringify(messages));
+      alert('تم إرسال صورتك المفاجأة لعمران بكل سرية وخصوصية 🤍');
+    }
+
+    // المزاج والفضفضة
+    let selectedMoodVal = "😊";
+    function selectMood(mood) {
+      selectedMoodVal = mood;
+      document.querySelectorAll('.mood-selector span').forEach(el => el.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+    }
+    function sendConfession() {
+      const text = document.getElementById('confessionInput').value.trim();
+      if (!text) { alert('اكتبي شي بالاول يا قلبي!'); return; }
+      const messages = JSON.parse(localStorage.getItem('omar_confessions') || '[]');
+      messages.unshift({ text: text, mood: selectedMoodVal, time: new Date().toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' }) });
+      localStorage.setItem('omar_confessions', JSON.stringify(messages));
+      document.getElementById('confessionInput').value = '';
+      alert('تم إرسال فضفضتك ومزاجك لعمران بكل حب وسرية 🤍');
+    }
+
+    // قفل الآيفون (992009)
+    let enteredPin = "";
+    const correctPin = "992009";
+    function pressKey(num) {
+      if (enteredPin.length < 6) {
+        enteredPin += num;
+        updateDots();
+        if (enteredPin.length === 6) setTimeout(checkPin, 200);
+      }
+    }
+    function deleteKey() { if (enteredPin.length > 0) { enteredPin = enteredPin.slice(0, -1); updateDots(); } }
+    function updateDots() {
+      for (let i = 0; i < 6; i++) {
+        const dot = document.getElementById(`d${i}`);
+        if (i < enteredPin.length) dot.classList.add('filled'); else dot.classList.remove('filled');
+      }
+    }
+    function checkPin() {
+      if (enteredPin === correctPin) {
+        document.getElementById('iphoneLock').style.display = 'none';
+        document.getElementById('adminDataBox').style.display = 'block';
+        loadConfessions();
+        enteredPin = ""; updateDots();
+      } else { alert('رمز المرور خطأ!'); enteredPin = ""; updateDots(); }
+    }
+    function lockAdmin() {
+      document.getElementById('iphoneLock').style.display = 'flex';
+      document.getElementById('adminDataBox').style.display = 'none';
+      enteredPin = ""; updateDots();
+    }
+    function loadConfessions() {
+      const list = document.getElementById('messagesList');
+      const messages = JSON.parse(localStorage.getItem('omar_confessions') || '[]');
+      if (messages.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888;">لا توجد رسائل أو صور حتى الآن..</p>'; return; }
+      let html = '';
+      messages.forEach(msg => {
+        let photoHtml = msg.photo ? `<br><img src="${msg.photo}" class="saved-photo">` : '';
+        html += `<div class="msg-card">
+          <div style="font-size:11px; color:#ff758c; margin-bottom:4px;">الحالة: ${msg.mood || '😊'} | ⏰ ${msg.time}</div>
+          <div>${msg.text}</div>
+          ${photoHtml}
+        </div>`;
+      });
+      list.innerHTML = html;
+    }
+
+    // أسئلة السهرة والألعاب
+    const loveQuestions = [
+      "لو رحنا رحلة مع بعض وين أول مكان بتختاريه؟",
+      "أكتر صفة بتحبيها فيني شو هي؟",
+      "لو قدرت أرجع الزمن لورا، شو أول موقف ودك ينعاد بيننا؟",
+      "شو أكتر كلمة بتحبي تسمعيها مني بالمكالمة؟"
+    ];
+    function spinLoveWheel() {
+      document.getElementById('loveQuestion').innerText = loveQuestions[Math.floor(Math.random() * loveQuestions.length)];
+    }
+
+    function calculateProfit() {
+      const income = parseFloat(document.getElementById('dailyIncome').value) || 0;
+      const expenses = parseFloat(document.getElementById('dailyExpenses').value) || 0;
+      document.getElementById('profitResult').innerText = `صافي الربح اليومي: ${income - expenses}`;
+    }
+
+    const questions = [
+      { q: "ما هو أبرد كوكب في المجموعة الشمسية؟", ops: ["أورانوس", "نبتون", "زحل", "المريخ"], ans: "أورانوس" },
+      { q: "من اكتشف قانون الجاذبية الأرضية؟", ops: ["إسحاق نيوتن", "أينشتاين", "فيثاغورس", "أرخميدس"], ans: "إسحاق نيوتن" }
+    ];
+    let currentScore = 200, currQIndex = 0;
+    function loadQuiz() {
+      if(currQIndex >= questions.length) currQIndex = 0;
+      const qData = questions[currQIndex];
+      document.getElementById('question-text').innerText = qData.q;
+      const opsContainer = document.getElementById('options-container');
+      opsContainer.innerHTML = '';
+      qData.ops.forEach(op => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = op;
+        btn.onclick = () => {
+          if(op === qData.ans) { currentScore += 20; alert('إجابة صحيحة! +20 نقطة 🎯'); }
+          else { alert('خطأ! الصحيحة: ' + qData.ans); }
+          document.getElementById('score-display').innerText = `النقاط: ${currentScore}`;
+          currQIndex++; loadQuiz();
+        };
+        opsContainer.appendChild(btn);
+      });
+    }
+    loadQuiz();
+  </script>
+</body>
+</html>
